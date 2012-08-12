@@ -12,8 +12,6 @@ class TSearchGrowl
     Twitter.configure do |config|
       config.consumer_key = @app_config["twitter"]["consumer_key"]
       config.consumer_secret = @app_config["twitter"]["consumer_secret"]
-      config.oauth_token = @app_config["twitter"]["consumer_oauth_token"]
-      config.oauth_token_secret = @app_config["twitter"]["consumer_oauth_token_secret"]
     end
 
     @loop = true
