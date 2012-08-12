@@ -53,6 +53,7 @@ begin
       n.title = tweet.from_user_name + " (@#{tweet.from_user})"
       n.message = tweet.text
       n.image = image_path
+      n.name = "t-search-growl"
     end
     sleep 1
   end
