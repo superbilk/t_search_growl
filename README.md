@@ -16,10 +16,10 @@ t.search("agile2012")
 
 # Options
 ```ruby
-t.loop        # true: if you'd like to get regular updated; false: runs only once (default=true)
-t.last_id     # integer: get only tweets AFTER that id (default=reads config file OR 1) 
-t.rerun       # integer: seconds to wait befor getting updated (default=10)
-t.max         # integer: number of tweets to get with every update (default=25)
+t.loop        # true: fetch regular updates; false: runs only once (default=true)
+t.last_id     # integer: fetch only tweets AFTER that id (default=reads config file OR 1) 
+t.rerun       # integer: seconds to wait before fetching updates (default=10)
+t.max         # integer: number of tweets to fetch with every update (default=25)
 t.max_first   # integer: number of tweets to fetch in the first run (default=max)
 t.persistent  # true: save last_id to config file; false: don't save (default=true)
 ```
