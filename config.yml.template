@@ -1,3 +1,5 @@
 twitter:
   consumer_key: key
   consumer_secret: secret
+
+last_id: 1

@@ -4,22 +4,23 @@ require 'yaml'
 require 'open-uri'
 
 class TSearchGrowl
-  attr_accessor :loop, :last_id, :rerun, :max_first, :max
+  attr_accessor :loop, :last_id, :rerun, :max_first, :max, :persistent
 
   def initialize
-    app_config = YAML.load_file("config.yaml")
+    @app_config = YAML.load_file("config.yml")
 
     Twitter.configure do |config|
-      config.consumer_key = app_config["twitter"]["consumer_key"]
-      config.consumer_secret = app_config["twitter"]["consumer_secret"]
-      config.oauth_token = app_config["twitter"]["consumer_oauth_token"]
-      config.oauth_token_secret = app_config["twitter"]["consumer_oauth_token_secret"]
+      config.consumer_key = @app_config["twitter"]["consumer_key"]
+      config.consumer_secret = @app_config["twitter"]["consumer_secret"]
+      config.oauth_token = @app_config["twitter"]["consumer_oauth_token"]
+      config.oauth_token_secret = @app_config["twitter"]["consumer_oauth_token_secret"]
     end
 
     @loop = true
-    @last_id = 1
+    @last_id = @app_config["last_id"]
     @rerun = 10
-    @max = 100
+    @max = 25
+    @persistent = true
   end
 
   def search query
@@ -27,8 +28,9 @@ class TSearchGrowl
     begin
       searchresult = Twitter.search(query, result: "recent", since_id: @last_id, rpp: @max)
       @last_id = searchresult.max_id
+      save_last_id if @persistent
 
-      searchresult.results.each do |tweet|
+      searchresult.results.reverse_each do |tweet|
         image_path = download_profile_image(tweet.profile_image_url)
 
         Growl.notify do |n|
@@ -58,6 +60,13 @@ private
       end
     end
     file_path
+  end
+
+  def save_last_id
+    @app_config["last_id"] = @last_id
+    File.open("config.yml", "w") do |file|
+      file.write @app_config.to_yaml
+    end
   end
 
 end
